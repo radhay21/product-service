@@ -5,12 +5,14 @@ import com.radhay.productservice.dto.ProductResponse;
 import com.radhay.productservice.implementation.ProductServiceImpl;
 import com.radhay.productservice.model.Product;
 import com.radhay.productservice.repository.ProductRepository;
+import org.junit.Before;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
@@ -24,6 +26,11 @@ public class ProductServiceImplTest
     ProductRepository productRepository ;
     @InjectMocks
     ProductServiceImpl productService;
+
+    @Before
+    public void setUp() {
+        MockitoAnnotations.initMocks(this);
+    }
 
     @Test
     public void createProduct(){
