@@ -5,50 +5,52 @@ import com.radhay.productservice.dto.ProductResponse;
 import com.radhay.productservice.implementation.ProductServiceImpl;
 import com.radhay.productservice.model.Product;
 import com.radhay.productservice.repository.ProductRepository;
-import org.junit.Before;
-import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
 
-@ExtendWith(MockitoExtension.class)
-//@RunWith(MockitoJunitRunner.class)
-public class ProductServiceImplTest
-{
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+@SpringBootTest
+public class ProductServiceImplTest {
 
     @Mock
-    ProductRepository productRepository ;
-    @InjectMocks
-    ProductServiceImpl productService;
+    private ProductRepository productRepository;
 
-    @Before
+    @InjectMocks
+    private ProductServiceImpl productService;
+
+    @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
     }
 
     @Test
-    public void createProduct(){
-        ProductRequest product = new ProductRequest();
-        product.setName("pro");
-        product.setPrice(BigDecimal.valueOf(10));
-        product.setDescription("product 1");
+    public void createProduct() {
+        ProductRequest productRequest = new ProductRequest();
+        productRequest.setName("pro");
+        productRequest.setPrice(BigDecimal.valueOf(10));
+        productRequest.setDescription("product 1");
 
-        Product response = new Product();
-        response.setId("1");
-        response.setName("pro");
-        response.setPrice(BigDecimal.valueOf(10));
-        response.setDescription("product 1");
+        Product savedProduct = new Product();
+        savedProduct.setId("1");
+        savedProduct.setName("pro");
+        savedProduct.setPrice(BigDecimal.valueOf(10));
+        savedProduct.setDescription("product 1");
 
-        Mockito.when(productRepository.save(new Product())).thenReturn(response);
-        ProductResponse  productResponse = productService.createProduct(product);
-        Assertions.assertEquals(productResponse,response);
-        //Assertions.assertTrue(productResponse.equals(response));
+        Mockito.when(productRepository.save(Mockito.any(Product.class))).thenReturn(savedProduct);
 
+        ProductResponse productResponse = productService.createProduct(productRequest);
+
+        assertEquals(savedProduct.getName(), productResponse.getName());
+        assertEquals(savedProduct.getPrice(), productResponse.getPrice());
+        assertEquals(savedProduct.getDescription(), productResponse.getDescription());
     }
 }
